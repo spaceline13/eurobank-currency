@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exchange Rate Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <style>
+        #chart-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+    </style>
+</head>
+<body>
+<h1>USD to EUR Exchange Rate Chart</h1>
+<div id="chart-container">
+    <div id="canvas-wrapper">
+        <canvas id="rateChart"></canvas>
+    </div>
+</div>
+<script>
+    async function fetchRates() {
+        const response = await fetch('/rates');
+        const data = await response.json();
+        return data;
+    }
+
+    function renderChart(data) {
+        const ctx = document.getElementById('rateChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.map(record => new Date(record.timestamp)),
+                datasets: [{
+                    label: 'USD to EUR',
+                    data: data.map(record => record.rate),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        }
+                    },
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    }
+
+    fetchRates().then(data => {
+
+        document.getElementById('canvas-wrapper').style.width = data.length * 50 + 'px'
+        document.getElementById('canvas-wrapper').style.height = '800px'
+
+
+        renderChart(data)
+
+
+        document.getElementById('chart-container').scrollLeft = document.getElementById('rateChart').scrollWidth;
+        window.scrollTo(0, document.body.scrollHeight);
+
+    });
+</script>
+</body>
+</html>
