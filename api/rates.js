@@ -43,7 +43,7 @@ const delay = time => new Promise(res=>setTimeout(res,time));
 
 async function scrapeLast30Days() {
     const today = new Date();
-    for (let i = 84; i >=0; i--) {
+    for (let i = 365; i >=0; i--) {
         const date = subDays(today, i);
         await scrapeExchangeRate(date);
         await delay(10000);

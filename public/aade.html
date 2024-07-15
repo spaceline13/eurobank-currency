@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exchange Rates Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+</head>
+<body>
+<canvas id="exchangeRatesChart" width="600" height="400"></canvas>
+<script>
+    const ctx = document.getElementById('exchangeRatesChart').getContext('2d');
+
+    const data = {
+        labels: [
+            '2023-09-01','2023-10-01', '2023-11-01', '2023-12-01', '2024-01-01', '2024-02-01',
+            '2024-03-01', '2024-04-01', '2024-05-01', '2024-06-01', '2024-07-01'
+        ],
+        datasets: [
+            {
+                label: 'USD',
+                data: [
+                    1.0805, 1.0702, 1.0565, 1.0911, 1.0944, 1.0905,
+                    1.0809, 1.0844, 1.0638, 1.0830, 1.0749
+                ],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: false
+            }
+        ]
+    };
+
+    const config = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'month',
+                        displayFormats: {
+                            month: 'MMM yyyy'
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Exchange Rate'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'AADE Exchange Rates for USD against EUR'
+                }
+            }
+        }
+    };
+
+    const exchangeRatesChart = new Chart(ctx, config);
+</script>
+</body>
+</html>
